@@ -5,20 +5,22 @@ namespace Handmade {
     template<typename T, std::size_t N>
     class Array final {
         using value_type = T;
-  
+
         using reference = value_type&;
         using const_reference = const value_type&;
 
         using size_type = std::size_t;
-  
+
         using pointer = value_type*;
         using const_pointer = const value_type*;
-  
+
         size_type m_size;
         size_type m_size_max;
-  
+
         T m_arr[N];
     public:
+        Array() = default;
+  
         explicit Array(const std::initializer_list<value_type> &list) : m_size(list.size()), m_size_max(N) {
             if(m_size > m_size_max) { 
                 throw std::length_error("data sheet size is larger than acceptable range");
@@ -33,8 +35,6 @@ namespace Handmade {
             *this = other;
         }
 
-        Array() : m_size(0), m_size_max(0) {};
-
         Array<value_type, N> operator=(const Array<value_type, N>& other) {
             *this = other;
         }
@@ -42,6 +42,10 @@ namespace Handmade {
         //operator
 
         reference operator[](const size_type pos) {
+            return m_arr[pos];
+        }
+
+        const_reference operator[](const size_type pos)const {
             return m_arr[pos];
         }
 
@@ -56,13 +60,9 @@ namespace Handmade {
             }
             return true;
         }
-  
-        const_reference operator[](const size_type pos)const {
-            return m_arr[pos];
-        }
 
         // no-const function
-  
+
         reference front() {
             return m_arr[0];
         }
@@ -118,7 +118,7 @@ namespace Handmade {
         }
 
         bool empty()const {
-            return m_size == 0 ? true : false;
+            return m_size == 0;
         }
 
         const_pointer data() const {
@@ -132,7 +132,7 @@ namespace Handmade {
   T& get(Array<T,N>& a) noexcept {
     return a[I];
   }
-  
+
   template<std::size_t I, typename T, std::size_t N>
   const T& get(const Array<T,N>& a) noexcept {
     return a[I];
