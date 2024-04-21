@@ -1,4 +1,6 @@
+#include <cstddef>
 #include <iostream>
+#include <initializer_list>
 #include <stdexcept>
 
 namespace Handmade {
@@ -20,7 +22,7 @@ namespace Handmade {
         T m_arr[N];
     public:
         Array() = default;
-  
+
         explicit Array(const std::initializer_list<value_type> &list) : m_size(list.size()), m_size_max(N) {
             if(m_size > m_size_max) { 
                 throw std::length_error("data sheet size is larger than acceptable range");
