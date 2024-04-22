@@ -16,14 +16,14 @@ namespace Handmade {
         using pointer = value_type*;
         using const_pointer = const value_type*;
 
-        size_type m_size;
-        size_type m_size_max;
+        size_type m_size = 0;
+        size_type m_size_max = N;
 
         T m_arr[N];
     public:
         Array() = default;
 
-        explicit Array(const std::initializer_list<value_type> &list) : m_size(list.size()), m_size_max(N) {
+        explicit Array(const std::initializer_list<value_type> &list) : m_size(list.size()) {
             if(m_size > m_size_max) { 
                 throw std::length_error("data sheet size is larger than acceptable range");
             }
@@ -33,15 +33,20 @@ namespace Handmade {
             }
         }
 
-        explicit Array(const Array<value_type, N>& other) : m_size(0), m_size_max(N) {
+        explicit Array(const Array<value_type, N>& other) {
             *this = other;
         }
 
         Array<value_type, N> operator=(const Array<value_type, N>& other) {
-            *this = other;
+          for(size_type i{}; i < m_size; ++i){
+            m_arr[i] = other.m_arr[i];
+          }
+
+          m_size = other.m_size;
+          m_size_max = other.m_size_max;
         }
 
-        //operator
+        //operators
 
         reference operator[](const size_type pos) {
             return m_arr[pos];
@@ -51,17 +56,37 @@ namespace Handmade {
             return m_arr[pos];
         }
 
-        bool operator==(const Array<value_type, N>& other) const {
-            if(m_size != other.m_size_max){
-                return false;
-            }
+        
+        /////////////new////////////////////////////////////        
+        bool operator<(const Array<value_type, N>& other) {
             for(size_type i{}; i < m_size_max; ++i){
-                if(m_arr[i] != other.m_arr[i]){
+                if(m_arr[i] >= other.m_arr[i]){
                     return false;
                 }
             }
             return true;
         }
+
+        bool operator>(const Array<value_type, N>& other) {
+            return !(*this < other);
+        }
+
+        constexpr bool operator==(const Array<value_type, N>& other) { 
+            return !(*this > other) || !(*this < other);
+        }
+
+        bool operator!=(const Array<value_type, N>& other) {
+            return !(*this == other);
+        }
+
+        bool operator<=(const Array<value_type, N>& other) {
+            return (*this < other) || (*this == other);
+        }
+
+        bool operator>=(const Array<value_type, N>& other) {
+            return (*this > other) || (*this == other);
+        }
+        ////////////////////////////////////////////////////
 
         // no-const function
 
@@ -143,8 +168,9 @@ namespace Handmade {
 
 int main()
 {
-    Handmade::Array<int, 3> arr{100,200,400};
-    Handmade::get<0>(arr) = 10;
-    std::cout << Handmade::get<0>(arr) << std::endl;
+    Handmade::Array<int, 3> arr{100, 100};
+    Handmade::Array<int, 3> arr2{102, 100};
+  
+    std::cout << (arr2 != arr) << std::endl;
     return 0;
 }
