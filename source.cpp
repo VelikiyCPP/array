@@ -68,24 +68,24 @@ namespace Handmade {
         }
 
         bool operator>(const Array<value_type, N>& other) {
-            return !(*this < other);
-        }
+    		return !(*this <= other);
+	}
 
-        constexpr bool operator==(const Array<value_type, N>& other) { 
-            return !(*this > other) || !(*this < other);
-        }
+	constexpr bool operator==(const Array<value_type, N>& other) { 
+    		return !(*this < other) && !(*this > other);
+	}
 
-        bool operator!=(const Array<value_type, N>& other) {
-            return !(*this == other);
-        }
+	bool operator!=(const Array<value_type, N>& other) {
+    		return !(*this == other);
+	}
 
-        bool operator<=(const Array<value_type, N>& other) {
-            return (*this < other) || (*this == other);
-        }
+	bool operator<=(const Array<value_type, N>& other) {
+    		return (*this < other) || (*this == other);
+	}
 
-        bool operator>=(const Array<value_type, N>& other) {
-            return (*this > other) || (*this == other);
-        }
+	bool operator>=(const Array<value_type, N>& other) {
+    		return (*this > other) || (*this == other);
+	}
         ////////////////////////////////////////////////////
 
         // no-const function
